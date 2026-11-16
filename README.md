@@ -2,11 +2,11 @@
 
 ## Proje Hakkında
 
-Bu proje, Siemens S7-1200 PLC kullanılarak TIA Portal ortamında geliştirilmiş bir tank ısıtma ve karıştırma otomasyonudur.
+Bu proje, Siemens S7-1200 PLC ve TIA Portal kullanılarak geliştirilmiş bir tank ısıtma ve mikser otomasyonudur.
 
-Sistem; tankın doldurulması, sıvı seviyesinin kontrol edilmesi, PT100 sıcaklık sensörü üzerinden sıcaklığın izlenmesi, ısıtıcı ve mikserin çalıştırılması ve tankın boşaltılması işlemlerini gerçekleştirmek amacıyla tasarlanmıştır.
+Sistem; tankın doldurulması, sıvı seviyesinin kontrol edilmesi, PT100 sensörüyle sıcaklığın izlenmesi, ısıtıcı ve mikserin çalıştırılması ve tankın boşaltılması işlemlerini otomatik olarak gerçekleştirmek amacıyla tasarlanmıştır.
 
-PLC programı Ladder (LAD) programlama diliyle hazırlanmış ve S7-PLCSIM kullanılarak simülasyon ortamında test edilmiştir.
+PLC programı Ladder (LAD) diliyle hazırlanmış ve S7-PLCSIM V18 ortamında test edilmiştir.
 
 ## Kullanılan Donanım ve Yazılımlar
 
@@ -23,33 +23,33 @@ PLC programı Ladder (LAD) programlama diliyle hazırlanmış ve S7-PLCSIM kulla
 
 ### 1. Tank Doldurma İşleminin Başlatılması
 
-Başlatma komutuyla sistem devreye girer. Üst seviye sensöründen gelen bilgiye göre doldurma valfi kontrol edilir ve tankın doldurulması sağlanır.
+Sistem başlatıldığında tankın doluluk durumu kontrol edilir. Tank dolu değilse doldurma valfi açılır ve dolum işlemi başlatılır.
 
-![Tank doldurma işleminin başlatılması](gorseller/01-tank-doldurma.png)
+![1. Tank doldurma işleminin başlatılması](Screenshot%202026-11-16%20155153.png)
 
 ### 2. Tank Dolumunun Tamamlanması
 
-Sıvı seviyesi üst seviye sensörüne ulaştığında doldurma işlemi tamamlanır ve doldurma valfi kapatılır.
+Sıvı seviyesi üst seviye sensörüne ulaştığında doldurma valfi kapatılır. Tankın dolum işlemi tamamlanır.
 
-![Tank dolumunun tamamlanması](gorseller/02-tank-dolumu.png)
+![2. Tank dolumunun tamamlanması](Screenshot%202026-11-16%20155318.png)
 
 ### 3. Isıtıcı ve Mikserin Devreye Girmesi
 
-Tankın dolmasının ardından sıcaklık bilgisi PT100 sensöründen alınır.
+Tank dolduktan sonra PT100 sensöründen alınan sıcaklık değeri PLC tarafından işlenir. Sıcaklık belirlenen değerin altındaysa ısıtıcı ve mikser çalıştırılır.
 
-PLC programında sıcaklık değeri işlenerek belirlenen sıcaklık koşuluna göre ısıtıcı ve mikser kontrol edilir.
-
-![Isıtıcı ve mikserin devreye girmesi](gorseller/03-isitici-mikser.png)
+![3. Isıtıcı ve mikserin devreye girmesi](Screenshot%202026-11-16%20155405.png)
 
 ### 4. Tank Boşaltma İşleminin Başlatılması
 
-Sıcaklık koşulları sağlandığında boşaltma valfi devreye girer ve tank içerisindeki sıvının boşaltılması sağlanır.
+Sıcaklık belirlenen seviyeye ulaştığında boşaltma valfi açılır ve tank içerisindeki sıvının boşaltılması sağlanır.
 
-![Tank boşaltma işleminin başlatılması](gorseller/04-tank-bosaltma.png)
+![4. Tank boşaltma işleminin başlatılması](Screenshot%202026-11-16%20155658.png)
 
-## PLC Giriş ve Çıkış Adresleri
+### 5. PLC Giriş ve Çıkış Adres Tablosu
 
-Projede kullanılan PLC giriş, çıkış ve hafıza adresleri aşağıdaki tabloda gösterilmiştir.
+Projede kullanılan PLC giriş, çıkış ve hafıza adresleri aşağıda gösterilmiştir.
+
+![5. PLC giriş ve çıkış adres tablosu](Screenshot%202026-11-16%20161155.png)
 
 | Değişken | PLC Adresi |
 |---|---|
@@ -63,21 +63,21 @@ Projede kullanılan PLC giriş, çıkış ve hafıza adresleri aşağıdaki tabl
 | Doldurma Valfi | %Q0.2 |
 | Boşaltma Valfi | %Q0.3 |
 | Sistem Genel Start | %M5.0 |
+| Tag_1 | %MW20 |
+| Tag_2 | %MD22 |
 | Sıcaklık Değeri | %MD26 |
 
-![PLC giriş ve çıkış adres tablosu](gorseller/05-plc-adres-tablosu.png)
-
-## Projede Kullanılan PLC Programlama Teknikleri
+## Kullanılan PLC Programlama Teknikleri
 
 - Ladder (LAD) programlama
 - Başlatma ve durdurma kontrolü
 - Seviye sensörleriyle valf kontrolü
 - TON zamanlayıcı kullanımı
 - PT100 sıcaklık verisinin işlenmesi
-- Veri tipi dönüşümü (INT → REAL)
-- Matematiksel işlemler ve sıcaklık karşılaştırması
+- INT ve REAL veri tipi dönüşümleri
+- Sıcaklık karşılaştırma işlemleri
 - PLC giriş ve çıkışlarının simülasyon ortamında izlenmesi
 
 ## Projenin Amacı
 
-Bu çalışmanın amacı, endüstriyel otomasyon sistemlerinde kullanılan PLC programlama tekniklerini uygulamalı olarak öğrenmek ve tank dolumu, sıcaklık kontrolü, karıştırma ve boşaltma işlemlerini tek bir otomasyon sistemi içerisinde gerçekleştirmektir.
+Bu çalışmanın amacı, endüstriyel otomasyon sistemlerinde kullanılan PLC programlama tekniklerini uygulamalı olarak geliştirmek ve tank dolumu, sıcaklık kontrolü, karıştırma ve boşaltma işlemlerini tek bir otomasyon sistemi içerisinde gerçekleştirmektir.
